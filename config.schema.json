@@ -1,0 +1,33 @@
+{
+  "pluginAlias": "RemehaPlatform",
+  "pluginType": "platform",
+  "singular": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "default": "Remeha"
+      },
+      "email": {
+        "title": "Brötje/Remeha App Email",
+        "type": "string",
+        "required": true,
+        "format": "email"
+      },
+      "password": {
+        "title": "Brötje/Remeha App Password",
+        "type": "string",
+        "required": true
+      },
+      "pollIntervalSeconds": {
+        "title": "Poll Interval (seconds)",
+        "type": "integer",
+        "default": 60,
+        "minimum": 30,
+        "description": "How often to refresh temperature data from the API. Minimum 30s."
+      }
+    }
+  }
+}

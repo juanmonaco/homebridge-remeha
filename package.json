@@ -1,0 +1,30 @@
+{
+  "name": "@juanmonaco/homebridge-remeha",
+  "version": "1.0.0",
+  "description": "Homebridge plugin for Br\u00f6tje/Remeha boiler systems via BDR Thermea cloud API",
+  "main": "index.js",
+  "keywords": [
+    "homebridge-plugin",
+    "homebridge",
+    "remeha",
+    "broetje",
+    "boiler",
+    "thermostat"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "homebridge": ">=1.6.0"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "author": "Juan Monaco",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juanmonaco/homebridge-remeha.git"
+  },
+  "bugs": {
+    "url": "https://github.com/juanmonaco/homebridge-remeha/issues"
+  },
+  "homepage": "https://github.com/juanmonaco/homebridge-remeha#readme"
+}
