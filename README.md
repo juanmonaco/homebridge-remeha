@@ -33,8 +33,6 @@ Or add it directly to your Homebridge `package.json` dependencies:
 
 ### Option 3 — Manual install on Docker-based Homebridge
 
-Copy the plugin files into your Homebridge volume and register it:
-
 ```bash
 # Copy plugin source into node_modules
 cp -r homebridge-remeha /your/homebridge/volumes/homebridge/node_modules/@juanmonaco/homebridge-remeha
@@ -84,30 +82,52 @@ Setting a target temperature while in AUTO mode activates a **temporary override
 
 ## Updating the Plugin
 
-The source lives at `/home/familypi/persistent/homebridge-remeha` on the Pi.
-Git is configured with SSH — no token needed.
+Git is configured with SSH on the Pi — no token needed anywhere.
+
+### From your Mac (recommended)
+
+Clone the repo once on your Mac:
 
 ```bash
-# SSH into the Pi
-ssh familypi@familypi
+git clone git@github.com:juanmonaco/homebridge-remeha.git
+cd homebridge-remeha
+```
 
-# Go to the plugin source
+Make your changes, then push to GitHub:
+
+```bash
+git add .
+git commit -m "fix: describe your change"
+git push
+```
+
+Then deploy to the Pi with a single command from your Mac:
+
+```bash
+ssh familypi@familypi '/home/familypi/persistent/homebridge-remeha/deploy.sh'
+```
+
+### Directly on the Pi
+
+```bash
+ssh familypi@familypi
 cd /home/familypi/persistent/homebridge-remeha
 
-# Edit files as needed, then:
+# Edit files, then commit and push
 git add .
 git commit -m "fix: describe your change"
 git push
 
-# Sync the updated files into the Homebridge node_modules
-sudo cp lib/api.js lib/platform.js lib/accessory.js index.js package.json \
-  /home/familypi/persistent/homebridge/volumes/homebridge/node_modules/@juanmonaco/homebridge-remeha/
-sudo cp -r lib/ \
-  /home/familypi/persistent/homebridge/volumes/homebridge/node_modules/@juanmonaco/homebridge-remeha/
-
-# Restart Homebridge to pick up the changes
-sudo docker restart homebridge
+# Deploy in one step
+./deploy.sh
 ```
+
+### What deploy.sh does
+
+1. `git pull` — fetches the latest code from GitHub
+2. Copies updated files into the Homebridge `node_modules`
+3. Restarts the Homebridge Docker container
+4. Tails the logs to confirm successful startup
 
 ## Requirements
 
