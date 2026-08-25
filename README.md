@@ -19,9 +19,7 @@ Any Brötje or Remeha boiler managed via the **Brötje Home Komfort** or **Remeh
 2. Go to **Plugins** → search for `@juanmonaco/homebridge-remeha`
 3. Click **Install**
 
-### Option 2 — From GitHub (private repo)
-
-Inside the Homebridge container or on your host, run:
+### Option 2 — From GitHub
 
 ```bash
 npm install github:juanmonaco/homebridge-remeha
@@ -83,6 +81,33 @@ No local network access to the boiler is required. Everything goes through the B
 | OFF | Anti-frost | Sets the zone to frost protection (minimum temperature) |
 
 Setting a target temperature while in AUTO mode activates a **temporary override** — the schedule resumes automatically at the next scheduled switch time.
+
+## Updating the Plugin
+
+The source lives at `/home/familypi/persistent/homebridge-remeha` on the Pi.
+Git is configured with SSH — no token needed.
+
+```bash
+# SSH into the Pi
+ssh familypi@familypi
+
+# Go to the plugin source
+cd /home/familypi/persistent/homebridge-remeha
+
+# Edit files as needed, then:
+git add .
+git commit -m "fix: describe your change"
+git push
+
+# Sync the updated files into the Homebridge node_modules
+sudo cp lib/api.js lib/platform.js lib/accessory.js index.js package.json \
+  /home/familypi/persistent/homebridge/volumes/homebridge/node_modules/@juanmonaco/homebridge-remeha/
+sudo cp -r lib/ \
+  /home/familypi/persistent/homebridge/volumes/homebridge/node_modules/@juanmonaco/homebridge-remeha/
+
+# Restart Homebridge to pick up the changes
+sudo docker restart homebridge
+```
 
 ## Requirements
 
