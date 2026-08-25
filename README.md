@@ -13,13 +13,44 @@ Any Brötje or Remeha boiler managed via the **Brötje Home Komfort** or **Remeh
 
 ## Installation
 
+### Option 1 — Homebridge UI (recommended)
+
+1. Open the Homebridge UI (port 8581)
+2. Go to **Plugins** → search for `@juanmonaco/homebridge-remeha`
+3. Click **Install**
+
+### Option 2 — From GitHub (private repo)
+
+Inside the Homebridge container or on your host, run:
+
 ```bash
-npm install @juanmonaco/homebridge-remeha
+npm install github:juanmonaco/homebridge-remeha
+```
+
+Or add it directly to your Homebridge `package.json` dependencies:
+
+```json
+"@juanmonaco/homebridge-remeha": "github:juanmonaco/homebridge-remeha"
+```
+
+### Option 3 — Manual install on Docker-based Homebridge
+
+Copy the plugin files into your Homebridge volume and register it:
+
+```bash
+# Copy plugin source into node_modules
+cp -r homebridge-remeha /your/homebridge/volumes/homebridge/node_modules/@juanmonaco/homebridge-remeha
+
+# Add to Homebridge package.json dependencies:
+# "@juanmonaco/homebridge-remeha": "github:juanmonaco/homebridge-remeha"
+
+# Restart Homebridge
+docker restart homebridge
 ```
 
 ## Configuration
 
-Add to your Homebridge `config.json`:
+Add the following platform to your Homebridge `config.json`:
 
 ```json
 {
@@ -33,14 +64,31 @@ Add to your Homebridge `config.json`:
 
 | Field | Required | Default | Description |
 |---|---|---|---|
-| email | Yes | — | Brötje/Remeha app login email |
-| password | Yes | — | Brötje/Remeha app login password |
-| pollIntervalSeconds | No | 60 | How often to refresh temperature data (min 30s) |
+| `email` | Yes | — | Brötje/Remeha app login email |
+| `password` | Yes | — | Brötje/Remeha app login password |
+| `pollIntervalSeconds` | No | `60` | How often to refresh temperature data from the API (minimum 30s) |
 
 ## How It Works
 
-Uses the BDR Thermea OAuth2 API (https://) — the same API used by the official app.
-No local network access required, fully cloud-based.
+Uses the BDR Thermea OAuth2 API (`https://api.bdrthermea.net/Mobile/api/`) — the same API used by the official Brötje Home Komfort and Remeha Home apps. Authentication uses the Azure AD B2C OAuth2 flow with PKCE.
+
+No local network access to the boiler is required. Everything goes through the BDR Thermea cloud.
+
+## Thermostat Modes
+
+| HomeKit Mode | Remeha Mode | Behaviour |
+|---|---|---|
+| AUTO | Scheduling | Follows the boiler's configured time schedule |
+| HEAT | Manual | Holds the target temperature indefinitely |
+| OFF | Anti-frost | Sets the zone to frost protection (minimum temperature) |
+
+Setting a target temperature while in AUTO mode activates a **temporary override** — the schedule resumes automatically at the next scheduled switch time.
+
+## Requirements
+
+- Node.js >= 18.0.0
+- Homebridge >= 1.6.0
+- A Brötje IDA / Remeha thermostat connected to the BDR Thermea cloud (set up via the official app)
 
 ## License
 
